@@ -12,9 +12,12 @@ def strToBytes(s):
 def bytesToStr(bs):
     if not isinstance(bs, bytes):
         raise TypeError('invalid tage ' + type(bs))
-    data = bs.decode()
-    tag, _str = data[0], data[1:]
-    
+   
+    btag, _str = bs[:1], bs[1:]
+
+    if btag == b's':
+        _str = _str.decode('utf-8')
+
     return _str
     
 
@@ -37,7 +40,7 @@ def bytesToNum(bs):
         data += bs[i] << exp
         exp += 8
 
-    return size, data
+    return data, bs[1+size:]
 
     
 

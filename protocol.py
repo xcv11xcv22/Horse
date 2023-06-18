@@ -7,14 +7,17 @@ def plStrToBytes(s):
     return tag.encode() + b_len + data
 
 def plBytesToStr(bs):
-
-    b_size, str_len = bytesToNum(bs[1:])
-    data = bytesToStr(bytes([bs[0]])+ bs[2+b_size:])
+    btag, data = bs[:1], bs[1:]
+    if btag != b'b' and btag != b's':
+        raise TypeError('invalid tag ' + btag.decode())
+    
+    size, data = bytesToNum(data)
+    data = bytesToStr(btag+data)
     return data
 
 
-a = plStrToBytes(b"aaa")
+a = plStrToBytes(b"aaaaaaaaa")
 b = plBytesToStr(a)
 
-c = plStrToBytes(b)
+c = plStrToBytes("中文測試中文測試中文測試")
 d = plBytesToStr(c)
